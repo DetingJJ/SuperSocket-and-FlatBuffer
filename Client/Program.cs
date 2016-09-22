@@ -85,7 +85,7 @@ namespace Client
 
 
                         byte[] data = AppendByte(AppendByte(GetBytes(key), BitConverter.GetBytes(length)), buf);
-                        client.Send(buf);
+                        client.Send(data);
                         Console.WriteLine("Sent to Server");
                     }
                 }

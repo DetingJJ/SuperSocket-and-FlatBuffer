@@ -10,6 +10,13 @@ namespace Client
         {
         }
 
+        protected override int GetBodyLengthFromHeader(IBufferStream bufferStream, int length)
+        {
+            if (bufferStream.Length <= 4)
+                return 0;
+            return (int)bufferStream.Length - 4;
+        }
+
         public override PackageInfo<string, byte[]> ResolvePackage(IBufferStream bufferStream)
         {
             string key = bufferStream.ReadString(4, Encoding.UTF8);
@@ -21,13 +28,6 @@ namespace Client
             }
 
             return new PackageInfo<string, byte[]>(key, null);
-        }
-
-        protected override int GetBodyLengthFromHeader(IBufferStream bufferStream, int length)
-        {
-            if (bufferStream.Length <= 4)
-                return 0;
-            return (int)bufferStream.Length - 4;
         }
 
     }

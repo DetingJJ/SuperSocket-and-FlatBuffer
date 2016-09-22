@@ -48,6 +48,10 @@ namespace NetworkEngine
             ByteBuffer buffer = new ByteBuffer(requestInfo.Body);
             var monster = Monster.GetRootAsMonster(buffer);
             Console.WriteLine("HP: {0}", monster.Hp);
+            Console.WriteLine("Mana: {0}", monster.Mana);
+            Console.WriteLine("Color: {0}", monster.Color);
+            Console.WriteLine("Pos: ({0}, {1}, {2})", monster.Pos.Value.X, monster.Pos.Value.Y, monster.Pos.Value.Z);
+            Console.WriteLine("Weapon: {0}", monster.Weapons(0).Value.Name);
         }
 
         static void appServer_NewSessionConnected(MySession session)
