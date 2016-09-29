@@ -11,6 +11,14 @@ namespace Client
     {
         static void Main(string[] args)
         {
+
+            byte[] data = MakeMonster();
+            SendDataToServer(data);
+            while (true) ;
+        }
+
+        static private byte[] MakeMonster()
+        {
             FlatBufferBuilder builder = new FlatBufferBuilder(1);
             var weaponOneName = builder.CreateString("Sword");
             var weaponOneDamage = 3;
@@ -52,15 +60,13 @@ namespace Client
             var orc = Monster.EndMonster(builder);
             builder.Finish(orc.Value);
             var buf = builder.SizedByteArray();
-            
-            // Initialize the client with the receive filter and request handler
-            foo(buf);
-            while (true) ;
+
+            return buf;
         }
 
-        static private async void foo(byte[] buf)
+        static private async void SendDataToServer(byte[] buf)
         {
-            var client = new EasyClient();
+            var client = new MyClient();
             client.Initialize(new MyReceiveFilter(4), (request) =>
             {
                 // handle the received request
@@ -81,11 +87,7 @@ namespace Client
                         Console.WriteLine("Connected to Server");
                         Console.WriteLine("Buffer length: " + buf.Length);
                         string key = "hi";
-                        int length = buf.Length;
-
-
-                        byte[] data = AppendByte(AppendByte(GetBytes(key), BitConverter.GetBytes(length)), buf);
-                        client.Send(data);
+                        client.Send(key, buf);
                         Console.WriteLine("Sent to Server");
                     }
                 }

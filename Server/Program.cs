@@ -19,10 +19,10 @@ namespace NetworkEngine
             };
             server.Setup(serverConfig);
 
-            server.NewSessionConnected += new SessionHandler<MySession>(appServer_NewSessionConnected);
+            server.NewSessionConnected += new SessionHandler<MySession>(OnNewSessionConnected);
 
 
-            server.NewRequestReceived += new RequestHandler<MySession, MyRequestInfo>(appServer_NewRequestReceived);
+            server.NewRequestReceived += new RequestHandler<MySession, MyRequestInfo>(OnNewRequestReceived);
             
             server.Start();
 
@@ -42,7 +42,7 @@ namespace NetworkEngine
         }
 
 
-        static void appServer_NewRequestReceived(MySession session, MyRequestInfo requestInfo)
+        static void OnNewRequestReceived(MySession session, MyRequestInfo requestInfo)
         {
             Console.WriteLine("Received something");
             ByteBuffer buffer = new ByteBuffer(requestInfo.Body);
@@ -54,9 +54,10 @@ namespace NetworkEngine
             Console.WriteLine("Weapon: {0}", monster.Weapons(0).Value.Name);
         }
 
-        static void appServer_NewSessionConnected(MySession session)
+        static void OnNewSessionConnected(MySession session)
         {
             Console.WriteLine("Client Accepted");
+            session.Send("Welcome", null);
         }
     }
 }

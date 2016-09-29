@@ -1,16 +1,19 @@
-﻿using SuperSocket.SocketBase;
+﻿using SuperSocket.ClientEngine;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace NetworkEngine
+namespace Client
 {
-    class MySession : AppSession<MySession, MyRequestInfo>
+    class MyClient : EasyClient
     {
         public void Send(string key, byte[] body)
         {
             int length = body.Length;
             byte[] data = AppendByte(AppendByte(GetBytes(key), BitConverter.GetBytes(length)), body);
-            base.Send(new ArraySegment<byte>(data));
+            base.Send(data);
         }
 
         private byte[] GetBytes(string str)
